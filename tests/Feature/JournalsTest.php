@@ -9,21 +9,39 @@ class JournalsTest extends TestCase
 {
     use DatabaseMigrations;
 
+    protected $journal;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->journal = factory('App\Journal')->create();
+    }
+
     /** @test */
     public function a_user_can_view_all_journals()
     {
-        $journal = factory('App\Journal')->create();
-
         $response = $this->get('/journals');
-        $response->assertSee($journal->name);
+        $response->assertSee($this->journal->name);
     }
 
     /** @test */
     public function a_user_can_view_a_single_journal()
     {
-        $journal = factory('App\Journal')->create();
+        $response = $this->get('/journals/' . $this->journal->id);
+        $response->assertSee($this->journal->name);
+    }
 
-        $response = $this->get('/journals/' . $journal->id);
-        $response->assertSee($journal->name);
+    /** @test */
+    public function a_user_can_read_journal_entries()
+    {
+        // Given we have a journal
+        // And that journal has entries
+        $entry = factory('App\Entry')->create(['journal_id' => $this->journal->id]);
+        // When we visit the journal page
+        $response = $this->get('/journals/' . $this->journal->id);
+        // We should see all the entries
+        //var_dump($entry[0]->body);
+        $response->assertSee($entry->body);
     }
 }
