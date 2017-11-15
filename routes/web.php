@@ -21,3 +21,5 @@ Auth::routes();
 
 Route::get('/journals', 'JournalController@index');
 Route::get('/journals/{journal}', 'JournalController@show');
+
+Route::post('/journals/{journal}/entries', 'EntryController@store');

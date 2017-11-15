@@ -11,7 +11,7 @@
                         @foreach($journals as $journal)
                             <div>
                                 <h4>
-                                    <a href="/journals/{{ $journal->id }}">
+                                    <a href="{{ $journal->path() }}">
                                         {{ $journal->name }}
                                     </a>
                                 </h4>

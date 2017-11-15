@@ -21,27 +21,23 @@ class JournalsTest extends TestCase
     /** @test */
     public function a_user_can_view_all_journals()
     {
-        $response = $this->get('/journals');
-        $response->assertSee($this->journal->name);
+        $this->get('/journals')
+            ->assertSee($this->journal->name);
     }
 
     /** @test */
     public function a_user_can_view_a_single_journal()
     {
-        $response = $this->get('/journals/' . $this->journal->id);
-        $response->assertSee($this->journal->name);
+        $this->get($this->journal->path())
+            ->assertSee($this->journal->name);
     }
 
     /** @test */
     public function a_user_can_read_journal_entries()
     {
-        // Given we have a journal
-        // And that journal has entries
         $entry = factory('App\Entry')->create(['journal_id' => $this->journal->id]);
-        // When we visit the journal page
-        $response = $this->get('/journals/' . $this->journal->id);
-        // We should see all the entries
-        //var_dump($entry[0]->body);
-        $response->assertSee($entry->body);
+
+        $this->get($this->journal->path())
+            ->assertSee($entry->body);
     }
 }
