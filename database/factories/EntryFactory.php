@@ -3,8 +3,6 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Entry::class, function (Faker $faker) {
-    //$journal = Factory('App\Journal')->create();
-
     return [
         'user_id' => function() {
             return Factory('App\User')->create()->id;

@@ -20,6 +20,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::get('/journals', 'JournalController@index');
-Route::get('/journals/{journal}', 'JournalController@show');
+Route::get('/journals/{journal}', 'JournalController@show')->middleware('owner');
 
 Route::post('/journals/{journal}/entries', 'EntryController@store');

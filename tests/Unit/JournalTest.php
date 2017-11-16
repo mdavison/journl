@@ -34,4 +34,10 @@ class JournalTest extends TestCase
 
         $this->assertCount(1, $this->journal->entries);
     }
+
+    /** @test */
+    public function it_can_make_a_string_path()
+    {
+        $this->assertEquals('/journals/' . $this->journal->id, $this->journal->path());
+    }
 }

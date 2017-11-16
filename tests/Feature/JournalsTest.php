@@ -19,25 +19,78 @@ class JournalsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_all_journals()
+    public function a_user_can_view_a_single_journal_that_they_created()
     {
-        $this->get('/journals')
-            ->assertSee($this->journal->name);
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $this->get($journal->path())
+            ->assertSee($journal->name);
     }
 
     /** @test */
-    public function a_user_can_view_a_single_journal()
+    public function a_user_cannot_view_a_single_journal_that_they_did_not_create()
     {
+        $this->signIn();
+
         $this->get($this->journal->path())
-            ->assertSee($this->journal->name);
+            ->assertStatus(403);
     }
 
     /** @test */
-    public function a_user_can_read_journal_entries()
+    public function a_user_can_read_journal_entries_that_they_created()
     {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry = factory('App\Entry')->create([
+            'journal_id' => $journal->id
+        ]);
+
+        $this->get($journal->path())
+            ->assertSee($entry->body);
+    }
+
+    /** @test */
+    public function a_user_cannot_read_journal_entries_that_they_did_not_create()
+    {
+        $this->signIn();
+
         $entry = factory('App\Entry')->create(['journal_id' => $this->journal->id]);
 
         $this->get($this->journal->path())
-            ->assertSee($entry->body);
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function an_unauthenticated_user_cannot_view_journals()
+    {
+        $this->get($this->journal->path())
+            ->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function a_user_can_only_view_their_own_journals()
+    {
+        $this->signIn();
+
+        $firstJournal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $anotherUser = factory('App\User')->create();
+
+        $anotherJournal = factory('App\Journal')->create([
+            'user_id' => $anotherUser->id
+        ]);
+
+        $this->get('/journals')
+            ->assertSee($firstJournal->name)
+            ->assertDontSee($anotherJournal->name);
     }
 }

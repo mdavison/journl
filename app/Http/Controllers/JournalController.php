@@ -8,13 +8,22 @@ use Illuminate\Http\Request;
 class JournalController extends Controller
 {
     /**
+     * JournalController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $journals = Journal::latest()->get();
+        $journals = Journal::where('user_id', auth()->id())->get();
+
         return view('journals.index', compact('journals'));
     }
 
