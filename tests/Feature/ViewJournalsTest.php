@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-class JournalsTest extends TestCase
+class ViewJournalsTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -83,11 +83,7 @@ class JournalsTest extends TestCase
             'user_id' => auth()->id()
         ]);
 
-        $anotherUser = factory('App\User')->create();
-
-        $anotherJournal = factory('App\Journal')->create([
-            'user_id' => $anotherUser->id
-        ]);
+        $anotherJournal = factory('App\Journal')->create();
 
         $this->get('/journals')
             ->assertSee($firstJournal->name)

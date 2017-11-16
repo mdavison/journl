@@ -45,7 +45,12 @@ class JournalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $journal = Journal::create([
+            'user_id' => auth()->id(),
+            'name' => request('name')
+        ]);
+
+        return redirect($journal->path());
     }
 
     /**
