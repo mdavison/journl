@@ -12,11 +12,8 @@ class EntriesTest extends TestCase
     /** @test */
     public function an_authorized_user_may_create_an_entry()
     {
-        // Given we have an authenticated user
         $this->signIn();
 
-        // And an existing journal
-        // And the journal user_id is the authenticated user
         $journal = factory('App\Journal')->create([
             'user_id' => auth()->id()
         ]);
@@ -24,10 +21,8 @@ class EntriesTest extends TestCase
             'journal_id' => $journal->id
         ]);
 
-        // When the user adds an entry to the journal
         $this->post($journal->path() . '/entries', $entry->toArray());
 
-        // Then the entry should be included on the page
         $this->get($journal->path())->assertSee($entry->body);
     }
 
@@ -41,5 +36,23 @@ class EntriesTest extends TestCase
         factory('App\Journal')->create();
 
         $this->post('/journals/1/entries', []);
+    }
+
+    /** @test */
+    public function an_entry_requires_a_body()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry = factory('App\Entry')->make([
+            'journal_id' => $journal->id,
+            'body' => null
+        ]);
+
+        $this->post('/journals/1/entries', $entry->toArray())
+            ->assertSessionHasErrors('body');
+
     }
 }

@@ -34,7 +34,7 @@ class JournalController extends Controller
      */
     public function create()
     {
-        //
+        return view('journals.create');
     }
 
     /**
@@ -45,6 +45,10 @@ class JournalController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
         $journal = Journal::create([
             'user_id' => auth()->id(),
             'name' => request('name')

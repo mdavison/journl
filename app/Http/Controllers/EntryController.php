@@ -18,6 +18,10 @@ class EntryController extends Controller
 
     public function store(Journal $journal)
     {
+        $this->validate(request(), [
+            'body' => 'required'
+        ]);
+
         $journal->addEntry([
             'body' => request('body'),
             'user_id' => auth()->id()

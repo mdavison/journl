@@ -37,6 +37,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
                         &nbsp;<li><a href="/journals">All Journals</a></li>
+                        <li><a href="/journals/create">New Journal</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

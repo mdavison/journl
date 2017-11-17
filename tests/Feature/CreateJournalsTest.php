@@ -30,4 +30,15 @@ class CreateJournalsTest extends TestCase
 
         $this->get($journal->path())->assertSee($journal->name);
     }
+
+    /** @test */
+    public function a_journal_requires_a_name()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->make(['name' => null]);
+
+        $this->post('/journals', $journal->toArray())
+            ->assertSessionHasErrors('name');
+    }
 }
