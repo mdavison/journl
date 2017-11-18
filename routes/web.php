@@ -24,4 +24,4 @@ Route::post('/journals', 'JournalController@store');
 Route::get('/journals/create', 'JournalController@create');
 Route::get('/journals/{journal}', 'JournalController@show')->middleware('owner');
 
-Route::post('/journals/{journal}/entries', 'EntryController@store');
+Route::post('/entries', 'EntryController@store');

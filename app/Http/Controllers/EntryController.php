@@ -19,14 +19,17 @@ class EntryController extends Controller
     public function store(Journal $journal)
     {
         $this->validate(request(), [
+            'journal_id' => 'required',
             'body' => 'required'
         ]);
+
+        $journal = Journal::findOrFail(request('journal_id'));
 
         $journal->addEntry([
             'body' => request('body'),
             'user_id' => auth()->id()
         ]);
 
-        return back();
+        return back()->with('status', 'Your entry has been added successfully.');
     }
 }

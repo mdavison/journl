@@ -8,33 +8,34 @@
             </div>
         </div>
 
-        @if (auth()->check())
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <form method="POST" action="{{ $journal->path() . '/entries' }}">
-                        {{ csrf_field() }}
-                        <div class="form-group">
-                            <textarea name="body" id="body" class="form-control" placeholder="New entry" required>
-                                {{ old('body') }}
-                            </textarea>
-                        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <form method="POST" action="/entries">
+                    {{ csrf_field() }}
 
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-default">Submit</button>
-                        </div>
+                    <input type="hidden" name="journal_id" value="{{ $journal->id }}">
 
-                        @if (count($errors))
-                            <ul class="alert alert-danger list-unstyled">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
+                    <div class="form-group">
+                        <textarea name="body" id="body" class="form-control" placeholder="New entry" required>
+                            {{ old('body') }}
+                        </textarea>
+                    </div>
 
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+
+                    @if (count($errors))
+                        <ul class="alert alert-danger list-unstyled">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+
+                </form>
             </div>
-        @endif
+        </div>
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">

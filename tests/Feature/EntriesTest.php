@@ -21,7 +21,7 @@ class EntriesTest extends TestCase
             'journal_id' => $journal->id
         ]);
 
-        $this->post($journal->path() . '/entries', $entry->toArray());
+        $this->post('/entries', $entry->toArray());
 
         $this->get($journal->path())->assertSee($entry->body);
     }
@@ -35,7 +35,7 @@ class EntriesTest extends TestCase
 
         factory('App\Journal')->create();
 
-        $this->post('/journals/1/entries', []);
+        $this->post('/entries', []);
     }
 
     /** @test */
@@ -51,8 +51,32 @@ class EntriesTest extends TestCase
             'body' => null
         ]);
 
-        $this->post('/journals/1/entries', $entry->toArray())
+        $this->post('/entries', $entry->toArray())
             ->assertSessionHasErrors('body');
 
     }
+
+    /** @test */
+    public function an_authenticated_user_should_see_all_their_entries_on_the_home_page()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry1 = factory('App\Entry')->create([
+            'journal_id' => $journal->id,
+            'user_id' => auth()->id()
+        ]);
+        $entry2 = factory('App\Entry')->create([
+            'journal_id' => $journal->id,
+            'user_id' => auth()->id()
+        ]);
+
+        $this->get('/home')
+            ->assertSee($entry1->body)
+            ->assertSee($entry2->body);
+    }
+
+    // LEFT OFF HERE - a user can create an entry
 }
