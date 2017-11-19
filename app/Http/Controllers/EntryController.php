@@ -25,7 +25,7 @@ class EntryController extends Controller
 
         $journal = Journal::findOrFail(request('journal_id'));
 
-        if ($journal->id != auth()->id()) {
+        if ($journal->user_id != auth()->id()) {
             return redirect()->back()->withErrors(['user_id' => 'Journal does not belong to the current user']);
         }
 

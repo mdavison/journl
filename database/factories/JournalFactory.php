@@ -7,6 +7,7 @@ $factory->define(App\Journal::class, function (Faker $faker) {
         'user_id' => function() {
             return Factory('App\User')->create()->id;
         },
-        'name' => $faker->word()
+        'name' => $faker->word(),
+        'description' => $faker->sentence()
     ];
 });

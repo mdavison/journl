@@ -89,4 +89,45 @@ class ViewJournalsTest extends TestCase
             ->assertSee($firstJournal->name)
             ->assertDontSee($anotherJournal->name);
     }
+
+    /** @test */
+    public function entries_are_sorted_in_descending_order()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $entryForToday = factory('App\Entry')->create([
+            'journal_id' => $journal->id
+        ]);
+
+        $entryForYesterday = factory('App\Entry')->create([
+            'journal_id' => $journal->id,
+            'created_at' => date('Y-m-d', strtotime('yesterday'))
+        ]);
+
+        $request = $this->getJson($journal->path())->json()['entries']['data'];
+
+        // The entry listed first should have a later date
+        $this->assertTrue($request[0]['created_at'] > $request[1]['created_at']);
+    }
+
+    /** @test */
+    public function entries_are_paginated()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        factory('App\Entry', 40)->create([
+            'journal_id' => $journal->id
+        ]);
+
+        $this->get($journal->path())
+            ->assertSee('class="pagination"');
+    }
 }

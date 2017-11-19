@@ -15,7 +15,7 @@
                     <input type="hidden" name="journal_id" value="{{ $journal->id }}">
 
                     <div class="form-group">
-                        <textarea name="body" id="body" class="form-control" placeholder="New entry" required>
+                        <textarea name="body" id="body" rows="7" class="form-control" placeholder="New entry" required>
                             {{ old('body') }}
                         </textarea>
                     </div>
@@ -39,14 +39,16 @@
                 @foreach($entries as $entry)
                     @include('journals.entry')
                 @endforeach
+
+                {{ $entries->links() }}
             </div>
 
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <p>Description of journal goes here</p>
+                        <p>{{ $journal->description }}</p>
                         <hr>
-                        <p>There are {{ $entries->count() }} {{ str_plural('entry', $entries->count()) }}.</p>
+                        <p>This journal has {{ $entries->count() }} {{ str_plural('entry', $entries->count()) }}.</p>
                     </div>
                 </div>
             </div>

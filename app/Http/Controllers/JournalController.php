@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Journal;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class JournalController extends Controller
 {
@@ -51,7 +54,8 @@ class JournalController extends Controller
 
         $journal = Journal::create([
             'user_id' => auth()->id(),
-            'name' => request('name')
+            'name' => request('name'),
+            'description' => request('description')
         ]);
 
         return redirect($journal->path());
@@ -65,7 +69,12 @@ class JournalController extends Controller
      */
     public function show(Journal $journal)
     {
-        $entries = $journal->entries->sortByDesc('created_at');
+        $entries = $this->paginate($journal->entries->sortByDesc('created_at'), 2);
+        $entries->withPath($journal->path());
+
+        if (request()->expectsJson()) {
+            return compact('journal', 'entries');
+        }
 
         return view('journals.show', compact('journal', 'entries'));
     }
@@ -102,5 +111,25 @@ class JournalController extends Controller
     public function destroy(Journal $journal)
     {
         //
+    }
+
+    /**
+     * Generates pagination of items in an array or collection.
+     * https://gist.github.com/vluzrmos/3ce756322702331fdf2bf414fea27bcb
+     *
+     * @param array|Collection      $items
+     * @param int   $perPage
+     * @param int  $page
+     * @param array $options
+     *
+     * @return LengthAwarePaginator
+     */
+    protected function paginate(Collection $items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }

@@ -12,9 +12,14 @@
                             {{ csrf_field() }}
 
                             <div class="form-group">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" name="name"
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Name"
                                        value="{{ old('name') }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <textarea name="description" id="description" class="form-control" placeholder="Description">
+                                    {{ old('description') }}
+                                </textarea>
                             </div>
 
                             <div class="form-group">
