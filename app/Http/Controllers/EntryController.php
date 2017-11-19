@@ -25,9 +25,12 @@ class EntryController extends Controller
 
         $journal = Journal::findOrFail(request('journal_id'));
 
+        if ($journal->id != auth()->id()) {
+            return redirect()->back()->withErrors(['user_id' => 'Journal does not belong to the current user']);
+        }
+
         $journal->addEntry([
             'body' => request('body'),
-            'user_id' => auth()->id()
         ]);
 
         return back()->with('status', 'Your entry has been added successfully.');

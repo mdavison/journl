@@ -29,7 +29,6 @@ class JournalTest extends TestCase
     {
         $this->journal->addEntry([
             'body' => 'Foobar',
-            'user_id' => 1
         ]);
 
         $this->assertCount(1, $this->journal->entries);

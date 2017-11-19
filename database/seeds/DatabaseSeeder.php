@@ -13,11 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
 
-        //factory('App\Entry', 50)->create();
-
         $journals = factory('App\Journal', 50)->create();
         $journals->each(function ($journal) {
-            factory('App\Entry', 10)->create(['user_id' => $journal->user_id, 'journal_id' => $journal->id]);
+            factory('App\Entry', 10)->create(['journal_id' => $journal->id]);
         });
     }
 }

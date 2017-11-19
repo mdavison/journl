@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
         $journals = Journal::where('user_id', auth()->id())->orderBy('name', 'asc')->get();
-        $entries = Entry::where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        $entries = (new Journal)->entriesForUserID(auth()->id());
 
         return view('home', compact(['journals', 'entries']));
     }

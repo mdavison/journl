@@ -3,13 +3,12 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-8">
                 <h2>{{ $journal->name }}</h2>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+
+            <div class="col-md-8">
                 <form method="POST" action="/entries">
                     {{ csrf_field() }}
 
@@ -35,10 +34,9 @@
 
                 </form>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+
+            <div class="col-md-8">
                 @foreach($journal->entries as $entry)
                     @include('journals.entry')
                 @endforeach

@@ -16,7 +16,6 @@ class CreateEntriesTable extends Migration
         Schema::create('entries', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('journal_id');
-            $table->unsignedInteger('user_id');
             $table->text('body');
             $table->timestamps();
         });

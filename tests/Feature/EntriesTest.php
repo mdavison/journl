@@ -66,11 +66,9 @@ class EntriesTest extends TestCase
         ]);
         $entry1 = factory('App\Entry')->create([
             'journal_id' => $journal->id,
-            'user_id' => auth()->id()
         ]);
         $entry2 = factory('App\Entry')->create([
             'journal_id' => $journal->id,
-            'user_id' => auth()->id()
         ]);
 
         $this->get('/home')
@@ -78,5 +76,24 @@ class EntriesTest extends TestCase
             ->assertSee($entry2->body);
     }
 
-    // LEFT OFF HERE - a user can create an entry
+    /** @test */
+    public function an_authorized_user_cannot_create_an_entry_in_another_users_journal()
+    {
+        $this->signIn();
+        $signedInUser = auth()->id();
+
+        factory('App\Journal')->create([
+            'user_id' => $signedInUser
+        ]);
+
+        $journalForAnotherUser = factory('App\Journal')->create();
+
+        $entry = factory('App\Entry')->make([
+            'journal_id' => $journalForAnotherUser,
+        ]);
+
+        $this->post('/entries', $entry->toArray())
+            ->assertSessionHasErrors('user_id');
+
+    }
 }

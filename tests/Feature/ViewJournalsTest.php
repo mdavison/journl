@@ -9,15 +9,6 @@ class ViewJournalsTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected $journal;
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->journal = factory('App\Journal')->create();
-    }
-
     /** @test */
     public function a_user_can_view_a_single_journal_that_they_created()
     {
@@ -36,7 +27,10 @@ class ViewJournalsTest extends TestCase
     {
         $this->signIn();
 
-        $this->get($this->journal->path())
+        // Create journal for diff user
+        $journal = factory('App\Journal')->create();
+
+        $this->get($journal->path())
             ->assertStatus(403);
     }
 
@@ -57,20 +51,23 @@ class ViewJournalsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_cannot_read_journal_entries_that_they_did_not_create()
+    public function a_user_cannot_access_another_users_journal()
     {
         $this->signIn();
 
-        $entry = factory('App\Entry')->create(['journal_id' => $this->journal->id]);
+        // Create journal for diff user
+        $journal = factory('App\Journal')->create();
 
-        $this->get($this->journal->path())
+        $this->get($journal->path())
             ->assertStatus(403);
     }
 
     /** @test */
     public function an_unauthenticated_user_cannot_view_journals()
     {
-        $this->get($this->journal->path())
+        $journal = factory('App\Journal')->create();
+
+        $this->get($journal->path())
             ->assertRedirect('/login');
     }
 
@@ -80,10 +77,13 @@ class ViewJournalsTest extends TestCase
         $this->signIn();
 
         $firstJournal = factory('App\Journal')->create([
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'name' => 'first'
         ]);
 
-        $anotherJournal = factory('App\Journal')->create();
+        $anotherJournal = factory('App\Journal')->create([
+            'name' => 'second'
+        ]);
 
         $this->get('/journals')
             ->assertSee($firstJournal->name)
