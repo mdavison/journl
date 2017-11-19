@@ -27,9 +27,9 @@ class Journal extends Model
     {
         return Journal::where('user_id', $userID)
             ->with('entries')
-            ->orderBy('created_at', 'desc')
             ->get()
             ->pluck('entries')
-            ->first();
+            ->first()
+            ->sortByDesc('created_at');
     }
 }

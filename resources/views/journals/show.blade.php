@@ -3,12 +3,12 @@
 @section('content')
     <div class="container">
         <div class="row">
+
             <div class="col-md-8">
                 <h2>{{ $journal->name }}</h2>
-            </div>
 
+                <hr>
 
-            <div class="col-md-8">
                 <form method="POST" action="/entries">
                     {{ csrf_field() }}
 
@@ -33,14 +33,24 @@
                     @endif
 
                 </form>
-            </div>
 
+                <hr>
 
-            <div class="col-md-8">
-                @foreach($journal->entries as $entry)
+                @foreach($entries as $entry)
                     @include('journals.entry')
                 @endforeach
             </div>
+
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p>Description of journal goes here</p>
+                        <hr>
+                        <p>There are {{ $entries->count() }} {{ str_plural('entry', $entries->count()) }}.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </div>

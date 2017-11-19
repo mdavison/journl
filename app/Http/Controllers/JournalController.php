@@ -65,7 +65,9 @@ class JournalController extends Controller
      */
     public function show(Journal $journal)
     {
-        return view('journals.show', compact('journal'));
+        $entries = $journal->entries->sortByDesc('created_at');
+
+        return view('journals.show', compact('journal', 'entries'));
     }
 
     /**
