@@ -25,7 +25,7 @@ class JournalController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('user_id', auth()->id())->get();
+        $journals = Journal::journalsForUserID(auth()->id());
 
         return view('journals.index', compact('journals'));
     }

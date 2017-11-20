@@ -59,11 +59,40 @@ class JournalTest extends TestCase
             'journal_id' => $this->journal->id
         ]);
 
-        $entries = $this->journal->entriesForUserID($userID);
+        $entries = Journal::entriesForUserID($userID);
 
         // It should contain all the entries for the logged in user
         $this->assertEquals($entriesForLoggedInUser->pluck('body'), $entries->pluck('body'));
         // And should not contain an entry for the other user
         $this->assertNotContains($entriesForOtherUser->pluck('body')[0], $entries->pluck('body'));
+    }
+
+    /** @test */
+    public function it_can_get_all_the_journals_for_a_user()
+    {
+        $this->signIn();
+        $userID = auth()->id();
+
+        $journalsForSignedInUser = factory('App\Journal', 3)->create([
+            'user_id' => $userID
+        ]);
+
+        $journalsForAnotherUser = factory('App\Journal', 5)->create();
+
+        $journals = Journal::journalsForUserID($userID);
+        $journalsNames = $journals->pluck('name');
+
+        // Journals created for signed in user should appear in the $journals array
+        $journalsForSignedInUserNames = $journalsForSignedInUser->pluck('name');
+        foreach ($journalsForSignedInUserNames as $name) {
+            $this->assertContains($name, $journalsNames);
+        }
+
+        // Journals for the other user should not appear
+        $journalsForAnotherUserNames = $journalsForAnotherUser->pluck('name');
+        foreach ($journalsForAnotherUserNames as $name) {
+            $this->assertNotContains($name, $journalsNames);
+        }
+
     }
 }

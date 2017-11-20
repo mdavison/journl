@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Journal;
 use Illuminate\Support\ServiceProvider;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer('*', function ($view) {
+            $view->with('journals', Journal::journalsForUserID(auth()->id()));
+        });
     }
 
     /**

@@ -23,7 +23,13 @@ class Journal extends Model
         $this->entries()->create($entry);
     }
 
-    public function entriesForUserID($userID)
+    /**
+     * Returns a collection of entries for a specific user ID
+     *
+     * @param $userID
+     * @return mixed
+     */
+    public static function entriesForUserID($userID)
     {
         return Journal::where('user_id', $userID)
             ->with('entries')
@@ -31,5 +37,10 @@ class Journal extends Model
             ->pluck('entries')
             ->first()
             ->sortByDesc('created_at');
+    }
+
+    public static function journalsForUserID($userID)
+    {
+        return Journal::where('user_id', auth()->id())->orderBy('name', 'asc')->get();
     }
 }
