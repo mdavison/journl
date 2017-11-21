@@ -69,7 +69,7 @@ class JournalController extends Controller
      */
     public function show(Journal $journal)
     {
-        $entries = $this->paginate($journal->entries->sortByDesc('created_at'), 2);
+        $entries = $this->paginate($journal->entries->sortByDesc('created_at'), 20);
         $entries->withPath($journal->path());
 
         if (request()->expectsJson()) {
@@ -110,7 +110,13 @@ class JournalController extends Controller
      */
     public function destroy(Journal $journal)
     {
-        //
+        $journal->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect('/journals');
     }
 
     /**

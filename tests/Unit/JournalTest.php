@@ -80,19 +80,18 @@ class JournalTest extends TestCase
         $journalsForAnotherUser = factory('App\Journal', 5)->create();
 
         $journals = Journal::journalsForUserID($userID);
-        $journalsNames = $journals->pluck('name');
+        $journalsIDs = $journals->pluck('id');
 
         // Journals created for signed in user should appear in the $journals array
-        $journalsForSignedInUserNames = $journalsForSignedInUser->pluck('name');
-        foreach ($journalsForSignedInUserNames as $name) {
-            $this->assertContains($name, $journalsNames);
+        $journalsForSignedInUserIDs = $journalsForSignedInUser->pluck('id');
+        foreach ($journalsForSignedInUserIDs as $id) {
+            $this->assertContains($id, $journalsIDs);
         }
 
         // Journals for the other user should not appear
-        $journalsForAnotherUserNames = $journalsForAnotherUser->pluck('name');
-        foreach ($journalsForAnotherUserNames as $name) {
-            $this->assertNotContains($name, $journalsNames);
+        $journalsForAnotherUserIDs = $journalsForAnotherUser->pluck('id');
+        foreach ($journalsForAnotherUserIDs as $id) {
+            $this->assertNotContains($id, $journalsIDs);
         }
-
     }
 }

@@ -12,6 +12,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .level { display: flex; align: center; }
+        .flex { flex: 1 }
+    </style>
 </head>
 <body style="padding-bottom: 100px;">
     <div id="app">

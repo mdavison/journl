@@ -26,7 +26,9 @@
                            aria-expanded="false">Journals <span class="caret"></span></a>
 
                         <ul class="dropdown-menu">
-                             @foreach ($journals as $journal)
+                            <li><a href="/journals">All Journals</a></li>
+                            <li role="separator" class="divider"></li>
+                            @foreach ($journals as $journal)
                                 <li><a href="{{ $journal->path() }}">{{ $journal->name }}</a></li>
                              @endforeach
                         </ul>
