@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Entry;
 use App\Journal;
 use Illuminate\Http\Request;
 
@@ -34,5 +35,18 @@ class EntryController extends Controller
         ]);
 
         return back()->with('status', 'Your entry has been added successfully.');
+    }
+
+    public function destroy(Entry $entry)
+    {
+        $journal = Journal::find($entry->journal_id);
+
+        $entry->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect($journal->path());
     }
 }

@@ -26,3 +26,4 @@ Route::get('/journals/{journal}', 'JournalController@show')->middleware('owner')
 Route::delete('/journals/{journal}', 'JournalController@destroy')->middleware('owner');
 
 Route::post('/entries', 'EntryController@store');
+Route::delete('/entries/{entry}', 'EntryController@destroy')->middleware('owner');

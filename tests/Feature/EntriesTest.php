@@ -96,4 +96,45 @@ class EntriesTest extends TestCase
             ->assertSessionHasErrors('user_id');
 
     }
+
+    /** @test */
+    public function unauthorized_users_may_not_delete_entries()
+    {
+        $entry = factory('App\Entry')->create();
+
+        $this->assertDatabaseHas('entries', ['id' => $entry->id]);
+
+        $this->delete('/entries/' . $entry->id)
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $response = $this->json('DELETE', '/entries/' . $entry->id);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('entries', ['id' => $entry->id]);
+    }
+
+    /** @test */
+    public function authorized_users_may_delete_entries()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $entry = factory('App\Entry')->create([
+            'journal_id' => $journal->id
+        ]);
+
+        $this->assertDatabaseHas('entries', ['id' => $entry->id]);
+
+        $response = $this->json('DELETE', '/entries/' . $entry->id);
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('entries', ['id' => $entry->id]);
+    }
 }

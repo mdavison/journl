@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Entry;
 use App\Journal;
 use Closure;
 
@@ -19,12 +20,16 @@ class Owner
         if (in_array('journals', $request->segments())) {
             $journalID = $request->segments()[1];
             $journal = Journal::findOrFail($journalID);
-            if ($journal->user_id != auth()->id()) {
-                abort(403, 'Unauthorized action.');
-            }
+//            if ($journal->user_id != auth()->id()) {
+//                abort(403, 'Unauthorized action.');
+//            }
+        } else if (in_array('entries', $request->segments())) {
+            $entryID = $request->segments()[1];
+            $entry = Entry::findOrFail($entryID);
+            $journal = Journal::findOrFail($entry->journal_id);
         }
-        if (in_array('entries', $request->segments())) {
-            var_dump('find the user id from the entry');
+        if (!empty($journal) && ($journal->user_id != auth()->id())) {
+            abort(403, 'Unauthorized action.');
         }
 
         return $next($request);
