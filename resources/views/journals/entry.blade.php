@@ -19,13 +19,7 @@
 
         <div class="panel-footer level">
             <button class="btn btn-xs mr-1" @click="editing = true">Edit</button>
-
-            <form action="/entries/{{ $entry->id }}" method="POST">
-                {{ csrf_field() }}
-                {{ method_field('DELETE') }}
-
-                <button class="btn btn-xs btn-danger mr-1">Delete</button>
-            </form>
+            <button class="btn btn-xs btn-danger" @click="destroy">Delete</button>
         </div>
     </div>
 </entry>

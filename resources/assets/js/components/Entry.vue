@@ -17,7 +17,15 @@
 
                 this.editing = false;
 
-                flash('Entry updated.');
+                flash('Entry has been updated.');
+            },
+
+            destroy() {
+                axios.delete('/entries/' + this.attributes.id);
+
+                $(this.$el).fadeOut(300, () => {
+                    flash('Entry has been deleted.');
+                });
             }
         }
     }

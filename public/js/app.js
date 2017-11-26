@@ -43280,7 +43280,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.editing = false;
 
-            flash('Entry updated.');
+            flash('Entry has been updated.');
+        },
+        destroy: function destroy() {
+            axios.delete('/entries/' + this.attributes.id);
+
+            $(this.$el).fadeOut(300, function () {
+                flash('Entry has been deleted.');
+            });
         }
     }
 });
