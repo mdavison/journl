@@ -13,11 +13,15 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
-        .level { display: flex; align: center; }
+        body { padding-bottom: 100px; }
+        .level { display: flex; align-items: center; }
         .flex { flex: 1 }
+        .mr-1 { margin-right: 1em; }
+        [v-cloak] { display: none; }
+
     </style>
 </head>
-<body style="padding-bottom: 100px;">
+<body>
     <div id="app">
         @include('layouts.nav')
 

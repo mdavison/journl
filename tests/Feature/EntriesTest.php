@@ -131,10 +131,45 @@ class EntriesTest extends TestCase
 
         $this->assertDatabaseHas('entries', ['id' => $entry->id]);
 
-        $response = $this->json('DELETE', '/entries/' . $entry->id);
+        $response = $this->json('DELETE', "/entries/{$entry->id}");
 
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('entries', ['id' => $entry->id]);
+    }
+
+    /** @test */
+    public function authorized_users_can_update_entries()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry = factory('App\Entry')->create([
+            'journal_id' => $journal->id
+        ]);
+
+        $updatedEntry = 'The entry has been changed.';
+        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry]);
+
+        $this->assertDatabaseHas('entries', ['id' => $entry->id, 'body' => $updatedEntry]);
+    }
+
+    /** @test */
+    public function unauthorized_users_may_not_update_entries()
+    {
+        $entry = factory('App\Entry')->create();
+
+        $updatedEntry = 'The entry has been changed.';
+        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('entries', ['id' => $entry->id, 'body' => $updatedEntry]);
     }
 }

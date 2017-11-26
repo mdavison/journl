@@ -117,7 +117,7 @@ class JournalController extends Controller
             return response([], 204);
         }
 
-        return redirect('/journals');
+        return redirect('/journals')->with('flash', '"' . $journal->name . '" was deleted.');
     }
 
     /**

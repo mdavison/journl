@@ -15,7 +15,7 @@ class EntryController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('owner')->only('destroy');
+        $this->middleware('owner')->only('destroy', 'update');
     }
 
     public function store(Journal $journal)
@@ -38,6 +38,15 @@ class EntryController extends Controller
         return back()->with('flash', 'Your entry has been added.');
     }
 
+    public function update(Entry $entry)
+    {
+        $this->validate(request(), [
+            'body' => 'required'
+        ]);
+
+        $entry->update(request(['body']));
+    }
+
     public function destroy(Entry $entry)
     {
         $journal = Journal::find($entry->journal_id);
@@ -48,6 +57,6 @@ class EntryController extends Controller
             return response([], 204);
         }
 
-        return redirect($journal->path());
+        return redirect($journal->path())->with('flash', 'Entry was deleted');
     }
 }
