@@ -28,7 +28,7 @@ class ManageJournalsTest extends TestCase
 
         $this->post('/journals', $journal->toArray());
 
-        $this->get($journal->path())->assertSee($journal->name);
+        $this->assertDatabaseHas('journals', ['name' => $journal->name]);
     }
 
     /** @test */

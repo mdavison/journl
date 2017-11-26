@@ -16,6 +16,7 @@ class JournalController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('owner')->except(['index', 'create', 'store']);
     }
 
     /**

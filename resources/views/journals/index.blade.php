@@ -6,7 +6,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <h2>Journals</h2>
 
-                @foreach($journals as $journal)
+                @forelse($journals as $journal)
                     <div class="panel panel-default">
 
                         <div class="panel-heading">
@@ -28,7 +28,9 @@
                         <div class="panel-body">{{ $journal->description }}</div>
                     </div>
 
-                @endforeach
+                @empty
+                    <p>You don't have any journals yet.</p>
+                @endforelse
 
             </div>
         </div>

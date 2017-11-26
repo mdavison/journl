@@ -20,9 +20,6 @@ class Owner
         if (in_array('journals', $request->segments())) {
             $journalID = $request->segments()[1];
             $journal = Journal::findOrFail($journalID);
-//            if ($journal->user_id != auth()->id()) {
-//                abort(403, 'Unauthorized action.');
-//            }
         } else if (in_array('entries', $request->segments())) {
             $entryID = $request->segments()[1];
             $entry = Entry::findOrFail($entryID);
