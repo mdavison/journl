@@ -59,7 +59,7 @@ class JournalController extends Controller
             'description' => request('description')
         ]);
 
-        return redirect($journal->path());
+        return redirect($journal->path())->with('flash', 'Your journal has been created.');
     }
 
     /**

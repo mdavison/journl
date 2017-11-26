@@ -35,7 +35,7 @@ class EntryController extends Controller
             'body' => request('body'),
         ]);
 
-        return back()->with('status', 'Your entry has been added successfully.');
+        return back()->with('flash', 'Your entry has been added.');
     }
 
     public function destroy(Entry $entry)
