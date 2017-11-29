@@ -44,6 +44,10 @@ class EntryController extends Controller
             'body' => 'required'
         ]);
 
+        if (request()->session()->has('errors')) {
+            return response(session('errors'));
+        }
+
         $entry->update(request(['body']));
     }
 
