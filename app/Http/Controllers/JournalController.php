@@ -100,7 +100,11 @@ class JournalController extends Controller
      */
     public function update(Request $request, Journal $journal)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $journal->update(request(['name', 'description']));
     }
 
     /**

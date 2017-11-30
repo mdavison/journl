@@ -74,4 +74,51 @@ class ManageJournalsTest extends TestCase
 
         $this->assertDatabaseMissing('journals', ['id' => $journal->id]);
     }
+
+    /** @test */
+    public function unauthorized_users_may_not_update_journals()
+    {
+        $journal = factory('App\Journal')->create([
+            'name' => 'Foo'
+        ]);
+
+        $this->patch($journal->path())
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $changedName = 'Changed name';
+        $this->patch($journal->path(), ['name' => $changedName])
+            ->assertStatus(403);
+
+        $this->assertDatabaseHas('journals', ['id' => $journal->id, 'name' => 'Foo']);
+    }
+
+    /** @test */
+    public function authorized_users_may_edit_journals()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $changedName = 'Changed name';
+        $this->patch($journal->path(), ['name' => $changedName]);
+
+        $this->assertDatabaseHas('journals', ['id' => $journal->id, 'name' => $changedName]);
+    }
+
+    /** @test */
+    public function updating_a_journal_requires_a_name()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+
+        $this->patch($journal->path(), ['name' => ''])
+            ->assertSessionHasErrors('name');
+    }
 }

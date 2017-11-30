@@ -139,7 +139,24 @@ class EntriesTest extends TestCase
     }
 
     /** @test */
-    public function authorized_users_can_update_entries()
+    public function unauthorized_users_may_not_update_entries()
+    {
+        $entry = factory('App\Entry')->create();
+
+        $updatedEntry = 'The entry has been changed.';
+        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
+            ->assertStatus(403);
+
+        $this->assertDatabaseMissing('entries', ['id' => $entry->id, 'body' => $updatedEntry]);
+    }
+
+    /** @test */
+    public function authorized_users_may_update_entries()
     {
         $this->signIn();
 
@@ -157,19 +174,18 @@ class EntriesTest extends TestCase
     }
 
     /** @test */
-    public function unauthorized_users_may_not_update_entries()
+    public function updating_an_entry_requires_a_body()
     {
-        $entry = factory('App\Entry')->create();
-
-        $updatedEntry = 'The entry has been changed.';
-        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
-            ->assertRedirect('/login');
-
         $this->signIn();
 
-        $this->patch("/entries/{$entry->id}", ['body' => $updatedEntry])
-            ->assertStatus(403);
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry = factory('App\Entry')->create([
+            'journal_id' => $journal->id
+        ]);
 
-        $this->assertDatabaseMissing('entries', ['id' => $entry->id, 'body' => $updatedEntry]);
+        $this->patch("/entries/{$entry->id}", ['body' => ''])
+            ->assertSessionHasErrors('body');
     }
 }
