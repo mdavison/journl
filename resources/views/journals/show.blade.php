@@ -5,7 +5,7 @@
         <div class="row">
 
             <div class="col-md-8">
-                <h2>{{ $journal->name }}</h2>
+                <h2>{{ $journal->name }} <a class="btn btn-default pull-right" href="{{ $journal->path() . '/edit' }}" role="button">Edit</a></h2>
 
                 <hr>
 

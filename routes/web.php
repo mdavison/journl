@@ -23,6 +23,7 @@ Route::get('/journals', 'JournalController@index');
 Route::post('/journals', 'JournalController@store');
 Route::get('/journals/create', 'JournalController@create');
 Route::get('/journals/{journal}', 'JournalController@show');
+Route::get('/journals/{journal}/edit', 'JournalController@edit');
 Route::patch('/journals/{journal}', 'JournalController@update');
 Route::delete('/journals/{journal}', 'JournalController@destroy');
 

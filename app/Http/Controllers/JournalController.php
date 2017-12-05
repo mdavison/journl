@@ -88,7 +88,7 @@ class JournalController extends Controller
      */
     public function edit(Journal $journal)
     {
-        //
+        return view('journals.edit', compact('journal'));
     }
 
     /**
@@ -105,6 +105,12 @@ class JournalController extends Controller
         ]);
 
         $journal->update(request(['name', 'description']));
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+
+        return redirect($journal->path())->with('flash', 'Journal name was updated.');
     }
 
     /**
