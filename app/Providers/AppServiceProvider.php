@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
-            $view->with('journals', Journal::journalsForUserID(auth()->id()));
+            $view->with('journalsForNav', Journal::journalsForUserID(auth()->id()));
         });
     }
 

@@ -18,9 +18,9 @@
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav">
+            @if (auth()->check())
+                <ul class="nav navbar-nav">
 
-                @if (auth()->check())
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">Journals <span class="caret"></span></a>
@@ -28,16 +28,23 @@
                         <ul class="dropdown-menu">
                             <li><a href="/journals">All Journals</a></li>
                             <li role="separator" class="divider"></li>
-                            @foreach ($journals as $journal)
-                                <li><a href="{{ $journal->path() }}">{{ $journal->name }}</a></li>
+                            @foreach ($journalsForNav as $journalForNav)
+                                <li><a href="{{ $journalForNav->path() }}">{{ $journalForNav->name }}</a></li>
                              @endforeach
                         </ul>
                     </li>
 
                     <li><a href="/journals/create">New Journal</a></li>
-                @endif
+                    
+                </ul>
 
-            </ul>
+                <form class="navbar-form navbar-left" method="GET" action="/search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            @endif
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">

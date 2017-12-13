@@ -30,3 +30,5 @@ Route::delete('/journals/{journal}', 'JournalController@destroy');
 Route::post('/entries', 'EntryController@store');
 Route::patch('/entries/{entry}', 'EntryController@update');
 Route::delete('/entries/{entry}', 'EntryController@destroy');
+
+Route::get('/search', 'SearchController@show');
