@@ -25,9 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $journals = Journal::where('user_id', auth()->id())->orderBy('name', 'asc')->get();
         $entries = Journal::entriesForUserID(auth()->id());
+        $paginatedEntries = paginate($entries, 20);
+        $paginatedEntries->withPath('/home');
 
-        return view('home', compact(['journals', 'entries']));
+        return view('home', ['entries' => $paginatedEntries]);
     }
 }

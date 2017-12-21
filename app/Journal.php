@@ -35,7 +35,7 @@ class Journal extends Model
             ->with('entries')
             ->get()
             ->pluck('entries')
-            ->first()
+            ->collapse()
             ->sortByDesc('created_at');
     }
 

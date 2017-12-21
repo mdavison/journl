@@ -1,7 +1,7 @@
 <entry :attributes="{{ $entry }}" inline-template v-cloak>
     <div class="panel panel-default">
         <div class="panel-heading">
-            {{ $entry->created_at->diffForHumans() }}
+            Posted {{ $entry->created_at->diffForHumans() }}
         </div>
 
         <div class="panel-body">
