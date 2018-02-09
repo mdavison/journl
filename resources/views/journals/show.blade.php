@@ -20,6 +20,15 @@
                         </textarea>
                     </div>
 
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <input type="date" class="form-control" id="entry_date" name="entry_date" placeholder="{{ date('Y-m-d') }}"
+                                       value="{{ old('entry_date', date('Y-m-d')) }}">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>

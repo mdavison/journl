@@ -17,6 +17,7 @@ class CreateEntriesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('journal_id');
             $table->text('body');
+            $table->date('entry_date')->default(date('Y-m-d'));
             $table->timestamps();
         });
     }

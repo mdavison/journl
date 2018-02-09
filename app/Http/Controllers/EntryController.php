@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Entry;
 use App\Journal;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EntryController extends Controller
@@ -22,7 +23,8 @@ class EntryController extends Controller
     {
         $this->validate(request(), [
             'journal_id' => 'required',
-            'body' => 'required'
+            'body' => 'required',
+            'entry_date' => 'date'
         ]);
 
         $journal = Journal::findOrFail(request('journal_id'));
@@ -31,9 +33,16 @@ class EntryController extends Controller
             return redirect()->back()->withErrors(['user_id' => 'Journal does not belong to the current user']);
         }
 
-        $journal->addEntry([
-            'body' => request('body'),
-        ]);
+        if (is_null(request('entry_date'))) {
+            $journal->addEntry([
+                'body' => request('body')
+            ]);
+        } else {
+            $journal->addEntry([
+                'body' => request('body'),
+                'entry_date' => request('entry_date')
+            ]);
+        }
 
         return back()->with('flash', 'Your entry has been added.');
     }
@@ -41,14 +50,19 @@ class EntryController extends Controller
     public function update(Entry $entry)
     {
         $this->validate(request(), [
-            'body' => 'required'
+            'body' => 'required',
+            'entry_date' => 'date'
         ]);
 
         if (request()->session()->has('errors')) {
             return response(session('errors'));
         }
 
-        $entry->update(request(['body']));
+        if (empty(request('entry_date'))) {
+            $entry->update(request(['body']));
+        } else {
+            $entry->update(request(['body', 'entry_date']));
+        }
     }
 
     public function destroy(Entry $entry)

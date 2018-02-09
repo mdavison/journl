@@ -40,6 +40,15 @@
                                 </textarea>
                             </div>
 
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group">
+                                        <input type="date" class="form-control" id="entry_date" name="entry_date" placeholder="{{ date('Y-m-d') }}"
+                                               value="{{ old('entry_date', date('Y-m-d')) }}">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </div>
@@ -60,7 +69,7 @@
                     <entry :attributes="{{ $entry }}" inline-template v-cloak>
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                Posted {{ $entry->created_at->diffForHumans() }} in
+                                {{ $entry->displayDate() }} in
                                 <a href="/journals/{{ $entry->journal_id }}">{{ $entry->journalName() }}</a>
                             </div>
 
@@ -68,6 +77,15 @@
                                 <div v-if="editing">
                                     <div class="form-group">
                                         <textarea class="form-control" v-model="body" rows="5"></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <div class="form-group">
+                                                <input type="date" class="form-control" v-model="entry_date"
+                                                       value="{{ old('entry_date', date('Y-m-d')) }}">
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <button class="btn btn-xs btn-primary" @click="update">Update</button>

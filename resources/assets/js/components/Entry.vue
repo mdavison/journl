@@ -5,14 +5,16 @@
         data() {
             return {
                 editing: false,
-                body: this.attributes.body
+                body: this.attributes.body,
+                entry_date: this.attributes.entry_date
             }
         },
 
         methods: {
             update() {
                 axios.patch('/entries/' + this.attributes.id, {
-                    body: this.body
+                    body: this.body,
+                    entry_date: this.entry_date
                 })
                 .catch(error => {
                     flash(error.response.data.errors.body[0], 'danger');

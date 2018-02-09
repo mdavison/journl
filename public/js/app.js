@@ -43268,7 +43268,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             editing: false,
-            body: this.attributes.body
+            body: this.attributes.body,
+            entry_date: this.attributes.entry_date
         };
     },
 
@@ -43276,7 +43277,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         update: function update() {
             axios.patch('/entries/' + this.attributes.id, {
-                body: this.body
+                body: this.body,
+                entry_date: this.entry_date
             }).catch(function (error) {
                 flash(error.response.data.errors.body[0], 'danger');
             });

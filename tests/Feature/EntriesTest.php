@@ -57,6 +57,24 @@ class EntriesTest extends TestCase
     }
 
     /** @test */
+    public function an_entry_date_must_be_in_date_format()
+    {
+        $this->signIn();
+
+        $journal = factory('App\Journal')->create([
+            'user_id' => auth()->id()
+        ]);
+        $entry = factory('App\Entry')->make([
+            'journal_id' => $journal->id,
+            'body' => 'Lorem ipsum',
+            'entry_date' => 'hello'
+        ]);
+
+        $this->post('/entries', $entry->toArray())
+            ->assertSessionHasErrors('entry_date');
+    }
+
+    /** @test */
     public function an_authenticated_user_should_see_all_their_entries_on_the_home_page()
     {
         $this->signIn();
